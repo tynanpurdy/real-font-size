@@ -10,6 +10,25 @@
     <p>Pick a font</p>
     <!-- <div id="font-picker"></div> -->
 
+    <label for="typeSizeInput"
+      >Size:
+      <div id="typeSizeInputs" style="display: flex; flex-direction: row">
+        <input
+          type="number"
+          class="form-control"
+          id="typeSizeInput"
+          min="1"
+          max="400"
+          value="240"
+        />
+
+        <select class="form-control" id="typeUnitsInput">
+          <option value="px">px</option>
+          <option value="pt">pt</option>
+        </select>
+      </div></label
+    >
+
     <canvas
       id="Canvas"
       width="1000"
@@ -28,75 +47,104 @@
       // 	{ limit: 30 }, // Additional options
       // );
 
-      // measure real body text size
-      const sampleText = "Apd";
+      let typeSizeInput = document.getElementById("typeSizeInput");
+      let typeSize = typeSizeInput.value;
+      let typeUnitsInput = document.getElementById("typeUnitsInput");
+      let typeUnits = typeUnitsInput.value;
+      let testFontStyle = "240pt Arial";
+      typeSizeInputs.addEventListener("change", () => {
+        typeSize = typeSizeInput.value;
+        typeUnits = typeUnitsInput.value;
+
+        drawPreview();
+      });
+
+      // set up canvas
       const c = document.getElementById("Canvas"); // get canvas element
       const ctx = c.getContext("2d"); // classify it as a 2D space
-
       c.style.width = "500px";
       c.style.height = "300px";
 
-      // const testFontStyle = typeSize + typeUnits + " " + currentFont;
-      const testFontStyle = "240pt Arial";
-      ctx.font = testFontStyle; // set canvas font
-      console.log(testFontStyle);
+      const sampleText = "Apd";
+      const sampleTextX = 50;
+      const sampleTextY = 400;
 
-      // ctx.beginPath()
-      ctx.fillText(sampleText, 100, 500);
+      function drawPreview() {
+        ctx.clearRect(0, 0, c.width, c.height);
+        // const testFontStyle = typeSize + typeUnits + " " + currentFont;
+        testFontStyle = `${typeSize}${typeUnits} Arial`;
+        ctx.font = testFontStyle; // set canvas font
+        console.log(testFontStyle);
 
-      const textMetrics = ctx.measureText(sampleText); // a character with the maximum height
+        const textMetrics = ctx.measureText(sampleText); // a character with the maximum height
 
-      fakeHeight =
-        textMetrics.fontBoundingBoxAscent + textMetrics.fontBoundingBoxDescent;
-      realHeight =
-        textMetrics.actualBoundingBoxAscent +
-        textMetrics.actualBoundingBoxDescent;
+        fakeHeight =
+          textMetrics.fontBoundingBoxAscent +
+          textMetrics.fontBoundingBoxDescent;
+        realHeight =
+          textMetrics.actualBoundingBoxAscent +
+          textMetrics.actualBoundingBoxDescent;
 
-      document.getElementById("fakeHeight").innerText =
-        "Fake Height: " + fakeHeight;
-      document.getElementById("realHeight").innerText =
-        "Real Height: " + realHeight;
-
-      const baselinesAboveAlphabetic = [
-        "fontBoundingBoxAscent",
-        "actualBoundingBoxAscent",
-        "hangingBaseline",
-        "textBaseline"
-      ];
-      const baselinesBelowAlphabetic = [
-        "ideographicBaseline",
-        "emHeightDescent",
-        "actualBoundingBoxDescent",
-        "fontBoundingBoxDescent",
-      ];
-      const baselines = [
-        ...baselinesAboveAlphabetic,
-        ...baselinesBelowAlphabetic,
-      ];
-      // ctx.font = "25px serif";
-      ctx.strokeStyle = "red";
-
-      baselines.forEach((baseline) => {
-        const text = `Abcdefghijklmnop (${baseline})`;
-        const textMetrics = ctx.measureText(sampleText);
-        const y = 500;
         ctx.beginPath();
-        // ctx.fillText(text, 0, y);
-
-        const baselineMetricValue = textMetrics[baseline];
-        if (baselineMetricValue === undefined) {
-          return;
-        }
-
-        const lineY = baselinesBelowAlphabetic.includes(baseline)
-          ? y + Math.abs(baselineMetricValue)
-          : y - Math.abs(baselineMetricValue);
-        ctx.moveTo(0, lineY);
-        ctx.lineTo(550, lineY);
+        ctx.fillStyle = "#ebebeb";
+        ctx.fillRect(
+          sampleTextX,
+          sampleTextY - textMetrics.fontBoundingBoxAscent,
+          textMetrics.width,
+          fakeHeight
+        );
         ctx.stroke();
-        ctx.font = "25px serif";
-        ctx.fillText(baseline, 700, lineY);
-      });
+        ctx.fillStyle = "black";
+
+        ctx.fillText(sampleText, sampleTextX, sampleTextY);
+
+        document.getElementById("fakeHeight").innerText =
+          "Fake Height: " + fakeHeight;
+        document.getElementById("realHeight").innerText =
+          "Real Height: " + realHeight;
+
+        const baselinesAboveAlphabetic = [
+          // "fontBoundingBoxAscent",
+          "actualBoundingBoxAscent",
+          // "hangingBaseline",
+          "alphabeticBaseline",
+        ];
+        const baselinesBelowAlphabetic = [
+          // "ideographicBaseline",
+          // "emHeightDescent",
+          "actualBoundingBoxDescent",
+          // "fontBoundingBoxDescent",
+        ];
+        const baselines = [
+          ...baselinesAboveAlphabetic,
+          ...baselinesBelowAlphabetic,
+        ];
+        // ctx.font = "25px serif";
+        ctx.strokeStyle = "red";
+
+        baselines.forEach((baseline) => {
+          const text = `Abcdefghijklmnop (${baseline})`;
+          // const textMetrics = ctx.measureText(sampleText);
+          const y = sampleTextY;
+          ctx.beginPath();
+          // ctx.fillText(text, 0, y);
+
+          const baselineMetricValue = textMetrics[baseline];
+          if (baselineMetricValue === undefined) {
+            return;
+          }
+
+          const lineY = baselinesBelowAlphabetic.includes(baseline)
+            ? y + Math.abs(baselineMetricValue)
+            : y - Math.abs(baselineMetricValue);
+          ctx.moveTo(sampleTextX, lineY);
+          ctx.lineTo(sampleTextX + textMetrics.width, lineY);
+          ctx.stroke();
+          ctx.font = "25px serif";
+          ctx.fillText(baseline, sampleTextX + textMetrics.width + 50, lineY);
+        });
+      }
+      drawPreview();
     </script>
   </body>
 </html>
