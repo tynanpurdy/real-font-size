@@ -7,60 +7,72 @@
   </head>
   <body>
     <h1>Real Text Size</h1>
-    <p>Pick a font</p>
-    <!-- <div id="font-picker"></div> -->
-
-    <label for="typeSizeInput"
-      >Size:
-      <div id="typeSizeInputs" style="display: flex; flex-direction: row">
+    <div id="typeInputs">
+      <label for="fontInput"
+        >Type the name of any font on your computer: <input type="text" id="fontInput" value="Arial"
+      /></label>
+      <label for="typeSizeInput" style="display: flex; flex-direction: row"
+        >Size:
         <input
           type="number"
           class="form-control"
           id="typeSizeInput"
           min="1"
           max="400"
-          value="240"
+          value="12"
         />
 
         <select class="form-control" id="typeUnitsInput">
           <option value="px">px</option>
           <option value="pt">pt</option>
         </select>
-      </div></label
-    >
-
-    <canvas
-      id="Canvas"
-      width="1000"
-      height="600"
-      style="border: 1px solid black"
-    ></canvas>
-
-    <div id="fakeHeight"></div>
-    <div id="realHeight"></div>
-
-    <script src="FontPicker.ts"></script>
+      </label>
+    </div>
+    <div style="display: flex; flex-direction: row">
+      <div id="previewText" style="font-family: 'Arial'">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ultrices vitae
+        auctor eu augue ut lectus. Magna sit amet purus gravida quis blandit
+        turpis. Quam quisque id diam vel quam elementum. Mi sit amet mauris
+        commodo quis imperdiet massa tincidunt. Habitant morbi tristique
+        senectus et netus. Varius morbi enim nunc faucibus a pellentesque sit.
+        Vel turpis nunc eget lorem dolor sed viverra.
+      </div>
+      <div>
+        <div style="display: flex; flex-direction: row">
+          <div id="realHeight"></div>
+          <button id="copyButton">📋</button>
+        </div>
+        <canvas
+          id="diagram"
+          width="1000"
+          height="600"
+          style="border: 1px solid black"
+        ></canvas>
+      </div>
+    </div>
     <script>
-      // const fontPicker = new FontPicker(
-      // 	"", // Google API key
-      // 	"Arial", // Default font
-      // 	{ limit: 30 }, // Additional options
-      // );
-
-      let typeSizeInput = document.getElementById("typeSizeInput");
+      const fontInput = document.getElementById("fontInput");
+      let font = fontInput.value;
+      const typeSizeInput = document.getElementById("typeSizeInput");
       let typeSize = typeSizeInput.value;
-      let typeUnitsInput = document.getElementById("typeUnitsInput");
+      const typeUnitsInput = document.getElementById("typeUnitsInput");
       let typeUnits = typeUnitsInput.value;
-      let testFontStyle = "240pt Arial";
-      typeSizeInputs.addEventListener("change", () => {
+      let testFontStyle = "12pt Arial";
+      const previewText = document.getElementById("previewText");
+
+      previewText.style.font = `${typeSize}${typeUnits} ${font}`;
+      typeInputs.addEventListener("change", () => {
+        font = fontInput.value;
         typeSize = typeSizeInput.value;
         typeUnits = typeUnitsInput.value;
 
+        previewText.style.font = `${typeSize}${typeUnits} ${font}`;
         drawPreview();
       });
 
       // set up canvas
-      const c = document.getElementById("Canvas"); // get canvas element
+      const c = document.getElementById("diagram"); // get canvas element
       const ctx = c.getContext("2d"); // classify it as a 2D space
       c.style.width = "500px";
       c.style.height = "300px";
@@ -69,67 +81,68 @@
       const sampleTextX = 50;
       const sampleTextY = 400;
 
+      function unitsCorrectedSize(size) {
+        if (typeUnits === "pt") {
+          size = size * (72 / 96);
+          return size;
+        } else {
+          return size;
+        }
+      }
+
       function drawPreview() {
         ctx.clearRect(0, 0, c.width, c.height);
         // const testFontStyle = typeSize + typeUnits + " " + currentFont;
-        testFontStyle = `${typeSize}${typeUnits} Arial`;
+        let diagramFontStyle = `240pt ${font}`;
+        testFontStyle = `${typeSize}${typeUnits} ${font}`;
         ctx.font = testFontStyle; // set canvas font
         console.log(testFontStyle);
 
         const textMetrics = ctx.measureText(sampleText); // a character with the maximum height
 
-        fakeHeight =
-          textMetrics.fontBoundingBoxAscent +
-          textMetrics.fontBoundingBoxDescent;
         realHeight =
           textMetrics.actualBoundingBoxAscent +
           textMetrics.actualBoundingBoxDescent;
+
+        document.getElementById(
+          "realHeight"
+        ).textContent = `Real Height: ${unitsCorrectedSize(
+          realHeight
+        )} ${typeUnits}`;
+
+        ctx.font = diagramFontStyle;
+        const diagramTextMetrics = ctx.measureText(sampleText);
 
         ctx.beginPath();
         ctx.fillStyle = "#ebebeb";
         ctx.fillRect(
           sampleTextX,
-          sampleTextY - textMetrics.fontBoundingBoxAscent,
-          textMetrics.width,
-          fakeHeight
+          sampleTextY - diagramTextMetrics.fontBoundingBoxAscent,
+          diagramTextMetrics.width,
+          diagramTextMetrics.fontBoundingBoxAscent +
+            diagramTextMetrics.fontBoundingBoxDescent
         );
         ctx.stroke();
         ctx.fillStyle = "black";
-
         ctx.fillText(sampleText, sampleTextX, sampleTextY);
 
-        document.getElementById("fakeHeight").innerText =
-          "Fake Height: " + fakeHeight;
-        document.getElementById("realHeight").innerText =
-          "Real Height: " + realHeight;
-
         const baselinesAboveAlphabetic = [
-          // "fontBoundingBoxAscent",
           "actualBoundingBoxAscent",
-          // "hangingBaseline",
-          "alphabeticBaseline",
         ];
         const baselinesBelowAlphabetic = [
-          // "ideographicBaseline",
-          // "emHeightDescent",
           "actualBoundingBoxDescent",
-          // "fontBoundingBoxDescent",
         ];
         const baselines = [
           ...baselinesAboveAlphabetic,
           ...baselinesBelowAlphabetic,
         ];
-        // ctx.font = "25px serif";
         ctx.strokeStyle = "red";
 
         baselines.forEach((baseline) => {
-          const text = `Abcdefghijklmnop (${baseline})`;
-          // const textMetrics = ctx.measureText(sampleText);
           const y = sampleTextY;
           ctx.beginPath();
-          // ctx.fillText(text, 0, y);
 
-          const baselineMetricValue = textMetrics[baseline];
+          const baselineMetricValue = diagramTextMetrics[baseline];
           if (baselineMetricValue === undefined) {
             return;
           }
@@ -138,13 +151,33 @@
             ? y + Math.abs(baselineMetricValue)
             : y - Math.abs(baselineMetricValue);
           ctx.moveTo(sampleTextX, lineY);
-          ctx.lineTo(sampleTextX + textMetrics.width, lineY);
+          ctx.lineTo(sampleTextX + diagramTextMetrics.width, lineY);
           ctx.stroke();
-          ctx.font = "25px serif";
-          ctx.fillText(baseline, sampleTextX + textMetrics.width + 50, lineY);
         });
       }
       drawPreview();
+
+      document
+        .getElementById("copyButton")
+        .addEventListener("click", async function () {
+          // copy real height to clipboard
+          let tempInput = document.createElement("input");
+          tempInput.value = `${unitsCorrectedSize(realHeight)} ${typeUnits}`;
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand("copy");
+          document.body.removeChild(tempInput);
+
+          // signify value has been copied via button content
+          let originalText = this.textContent; // Store original button text
+          this.textContent = "✅";
+          setTimeout(
+            function () {
+              this.textContent = originalText; // Revert button text to original after 1 second
+            }.bind(this),
+            1000
+          );
+        });
     </script>
   </body>
 </html>
