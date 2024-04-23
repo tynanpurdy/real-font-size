@@ -3,16 +3,143 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Real Text Size</title>
+    <style>
+      :root {
+        --background-color-light: #ffffff;
+        --text-color-light: #000000;
+        --background-color-dark: #333333;
+        --text-color-dark: #ffffff;
+
+        /** CSS DARK THEME PRIMARY COLORS */
+        --color-primary-100: #89cc74;
+        --color-primary-200: #97d283;
+        --color-primary-300: #a4d893;
+        --color-primary-400: #b2dda2;
+        --color-primary-500: #bfe3b1;
+        --color-primary-600: #cce9c0;
+
+        /** CSS DARK THEME SURFACE COLORS */
+        --color-surface-100: #121212;
+        --color-surface-200: #282828;
+        --color-surface-300: #3f3f3f;
+        --color-surface-400: #575757;
+        --color-surface-500: #717171;
+        --color-surface-600: #8b8b8b;
+
+        /** CSS DARK THEME MIXED SURFACE COLORS */
+        --color-surface-mixed-100: #1d221b;
+        --color-surface-mixed-200: #323730;
+        --color-surface-mixed-300: #484c46;
+        --color-surface-mixed-400: #60635e;
+        --color-surface-mixed-500: #787b77;
+        --color-surface-mixed-600: #929490;
+      }
+
+      body {
+        background-color: var(--color-surface-100);
+        margin: 5% 10%;
+        color: var(--color-surface-600);
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
+
+      /* @media (prefers-color-scheme: light) {
+        body {
+          background-color: white;
+          color: var(--color-surface-100);
+        }
+      } */
+
+      /* @media (prefers-color-scheme: dark) {
+        body {
+          background-color: var(--color-surface-100);
+          color: var(--color-surface-600);
+        }
+      } */
+
+      h1 {
+        font-size: 96pt;
+        text-align: center;
+      }
+
+      input,
+      select {
+        padding: 0.2rem;
+        border: none;
+        border-bottom: 2px solid var(--color-surface-500);
+        background-color: var(--color-surface-100);
+        color: white;
+        /* border-radius: 5px; */
+        font-size: 32px;
+        /* width: 300px; */
+      }
+      input:focus,
+      select:focus {
+        outline: none;
+        border: none;
+        border-bottom: 2px solid var(--color-primary-100);
+      }
+
+      button {
+        font-size: 18pt;
+        background-color: var(--color-surface-100);
+        border-radius: 1rem;
+        border: 1px solid var(--color-surface-400);
+        padding: 0.5rem 1rem;
+      }
+
+      #launchFonts {
+        color: var(--color-surface-600);
+        font-size: 12pt;
+        border-radius: 0%;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid;
+        padding: 0.1rem 0%;
+      }
+
+      #launchFonts:hover {
+        color: white;
+        border-bottom: 1px solid white;
+      }
+    </style>
+
+    <title>Real Font Size</title>
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-K4R6RNTHT5"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-K4R6RNTHT5");
+  </script>
   <body>
-    <h1>Real Text Size</h1>
+    <h1><i>Real</i> Font Size</h1>
+
     <div id="typeInputs">
-      <label for="fontInput"
-        >Type the name of any font on your computer: <input type="text" id="fontInput" value="Arial"
-      /></label>
-      <label for="typeSizeInput" style="display: flex; flex-direction: row"
-        >Size:
+      <i>Type the name of any font on your computer</i>
+      <button id="launchFonts">(<i>See your fonts</i>)</button>
+
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          gap: 1rem;
+          align-items: baseline;
+          font-size: 24pt;
+          padding-bottom: 1rem;
+        "
+      >
+        <input type="text" id="fontInput" value="Arial" />
+
         <input
           type="number"
           class="form-control"
@@ -26,10 +153,26 @@
           <option value="px">px</option>
           <option value="pt">pt</option>
         </select>
-      </label>
+
+        <i>is actually </i>
+        <div id="realHeight" style="color: white"></div>
+        <button
+          id="copyButton"
+          style="
+            font-size: 18pt;
+            background-color: var(--color-surface-100);
+            border-radius: 1rem;
+            border: 1px solid var(--color-surface-400);
+            padding: 0.5rem 1rem;
+          "
+        >
+          📋
+        </button>
+      </div>
     </div>
-    <div style="display: flex; flex-direction: row">
+    <div style="display: flex; flex-direction: row; gap: 2rem">
       <div id="previewText" style="font-family: 'Arial'">
+        <!-- make limit to 80 char wide?-->
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ultrices vitae
         auctor eu augue ut lectus. Magna sit amet purus gravida quis blandit
@@ -38,20 +181,51 @@
         senectus et netus. Varius morbi enim nunc faucibus a pellentesque sit.
         Vel turpis nunc eget lorem dolor sed viverra.
       </div>
-      <div>
-        <div style="display: flex; flex-direction: row">
-          <div id="realHeight"></div>
-          <button id="copyButton">📋</button>
-        </div>
-        <canvas
-          id="diagram"
-          width="1000"
-          height="600"
-          style="border: 1px solid black"
-        ></canvas>
-      </div>
+
+      <canvas id="diagram"></canvas>
     </div>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+      data-name="bmc-button"
+      data-slug="tynanpurdy"
+      data-color="#97d283"
+      data-emoji=""
+      data-font="Arial"
+      data-text="Buy me a coffee"
+      data-outline-color="#000000"
+      data-font-color="#000000"
+      data-coffee-color="#ffffff"
+    ></script>
     <script>
+      // open your local fonts list by platform
+      document.getElementById("launchFonts").addEventListener("click", () => {
+        if (navigator.platform.toUpperCase().indexOf("MAC") >= 0) {
+          window.open("fontbook://");
+        } else if (navigator.platform.toUpperCase().indexOf("WIN") >= 0) {
+          window.open("ms-settings:fonts");
+        } else if (navigator.userAgent.includes("Linux")) {
+          alert(
+            "I'm a novice programmer, ok? You chose linux and you knew the consequences when you did so. I have no clue how to open your font manager, if you even bothered to install one. Your fonts are in a folder somewhere, or three, I have no idea. Have fun searching, I believe in you."
+          );
+        } else if (navigator.userAgent.includes("Android")) {
+          alert(
+            "Font management is not available on Android. I don't make the rules. You can yell at Sundar Pichai if you want."
+          );
+        } else if (
+          navigator.userAgent.includes("iPhone") ||
+          navigator.userAgent.includes("iPad")
+        ) {
+          alert(
+            "Font management is not available on iOS. I don't make the rules. You can yell at Tim Apple if you want."
+          );
+        } else {
+          alert(
+            "Whatever OS you're running is not easily identified by my simple if statements. Good on you. As for your fonts, I have no clue where they are."
+          );
+        }
+      });
+
       const fontInput = document.getElementById("fontInput");
       let font = fontInput.value;
       const typeSizeInput = document.getElementById("typeSizeInput");
@@ -78,13 +252,12 @@
       c.style.height = "300px";
 
       const sampleText = "Apd";
-      const sampleTextX = 50;
-      const sampleTextY = 400;
+      const sampleTextX = 0;
+      let sampleTextY = 400;
 
       function unitsCorrectedSize(size) {
         if (typeUnits === "pt") {
-          size = size * (72 / 96);
-          return size;
+          return size * (72 / 96);
         } else {
           return size;
         }
@@ -92,7 +265,6 @@
 
       function drawPreview() {
         ctx.clearRect(0, 0, c.width, c.height);
-        // const testFontStyle = typeSize + typeUnits + " " + currentFont;
         let diagramFontStyle = `240pt ${font}`;
         testFontStyle = `${typeSize}${typeUnits} ${font}`;
         ctx.font = testFontStyle; // set canvas font
@@ -100,38 +272,40 @@
 
         const textMetrics = ctx.measureText(sampleText); // a character with the maximum height
 
-        realHeight =
+        let realHeight =
           textMetrics.actualBoundingBoxAscent +
           textMetrics.actualBoundingBoxDescent;
 
         document.getElementById(
           "realHeight"
-        ).textContent = `Real Height: ${unitsCorrectedSize(
-          realHeight
-        )} ${typeUnits}`;
+        ).textContent = `${unitsCorrectedSize(realHeight)} ${typeUnits}`;
 
         ctx.font = diagramFontStyle;
         const diagramTextMetrics = ctx.measureText(sampleText);
+        c.width = diagramTextMetrics.width;
+        c.height =
+          diagramTextMetrics.fontBoundingBoxAscent +
+          diagramTextMetrics.fontBoundingBoxDescent;
+        sampleTextY = diagramTextMetrics.fontBoundingBoxAscent;
+
+        diagramFontStyle = `240pt ${font}`;
+        ctx.font = diagramFontStyle;
 
         ctx.beginPath();
-        ctx.fillStyle = "#ebebeb";
+        ctx.fillStyle = "#282828";
         ctx.fillRect(
           sampleTextX,
-          sampleTextY - diagramTextMetrics.fontBoundingBoxAscent,
+          0,
           diagramTextMetrics.width,
           diagramTextMetrics.fontBoundingBoxAscent +
             diagramTextMetrics.fontBoundingBoxDescent
         );
         ctx.stroke();
-        ctx.fillStyle = "black";
+        ctx.fillStyle = "white";
         ctx.fillText(sampleText, sampleTextX, sampleTextY);
 
-        const baselinesAboveAlphabetic = [
-          "actualBoundingBoxAscent",
-        ];
-        const baselinesBelowAlphabetic = [
-          "actualBoundingBoxDescent",
-        ];
+        const baselinesAboveAlphabetic = ["actualBoundingBoxAscent"];
+        const baselinesBelowAlphabetic = ["actualBoundingBoxDescent"];
         const baselines = [
           ...baselinesAboveAlphabetic,
           ...baselinesBelowAlphabetic,
