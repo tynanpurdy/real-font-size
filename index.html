@@ -59,8 +59,15 @@
       } */
 
       h1 {
-        font-size: 96pt;
+        font-size: 400%;
         text-align: center;
+      }
+
+      select,
+      textarea,
+      input,
+      button {
+        font: inherit;
       }
 
       input,
@@ -70,9 +77,6 @@
         border-bottom: 2px solid var(--color-surface-500);
         background-color: var(--color-surface-100);
         color: white;
-        /* border-radius: 5px; */
-        font-size: 32px;
-        /* width: 300px; */
       }
       input:focus,
       select:focus {
@@ -82,16 +86,14 @@
       }
 
       button {
-        font-size: 18pt;
-        background-color: var(--color-surface-100);
-        border-radius: 1rem;
+        background-color: transparent;
+        border-radius: 0.7rem;
         border: 1px solid var(--color-surface-400);
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.8rem;
       }
 
       #launchFonts {
-        color: var(--color-surface-600);
-        font-size: 12pt;
+        color: inherit;
         border-radius: 0%;
         outline: none;
         border: none;
@@ -134,7 +136,7 @@
           flex-direction: row;
           gap: 1rem;
           align-items: baseline;
-          font-size: 24pt;
+          font-size: 150%;
           padding-bottom: 1rem;
         "
       >
@@ -156,18 +158,7 @@
 
         <i>is actually </i>
         <div id="realHeight" style="color: white"></div>
-        <button
-          id="copyButton"
-          style="
-            font-size: 18pt;
-            background-color: var(--color-surface-100);
-            border-radius: 1rem;
-            border: 1px solid var(--color-surface-400);
-            padding: 0.5rem 1rem;
-          "
-        >
-          📋
-        </button>
+        <button id="copyButton">📋</button>
       </div>
     </div>
     <div style="display: flex; flex-direction: row; gap: 2rem">
