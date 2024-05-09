@@ -274,34 +274,6 @@
     </footer>
 
     <script>
-      // open your local fonts list by platform
-      document.getElementById("launchFonts").addEventListener("click", () => {
-        if (navigator.platform.toUpperCase().indexOf("MAC") >= 0) {
-          window.open("fontbook://");
-        } else if (navigator.platform.toUpperCase().indexOf("WIN") >= 0) {
-          window.open("ms-settings:fonts");
-        } else if (navigator.userAgent.includes("Linux")) {
-          alert(
-            "I'm a novice programmer, ok? You chose linux and you knew the consequences when you did so. I have no clue how to open your font manager, if you even bothered to install one. Your fonts are in a folder somewhere, or three, I have no idea. Have fun searching, I believe in you."
-          );
-        } else if (navigator.userAgent.includes("Android")) {
-          alert(
-            "Font management is not available on Android. I don't make the rules. You can yell at Sundar Pichai if you want."
-          );
-        } else if (
-          navigator.userAgent.includes("iPhone") ||
-          navigator.userAgent.includes("iPad")
-        ) {
-          alert(
-            "Font management is not available on iOS. I don't make the rules. You can yell at Tim Apple if you want."
-          );
-        } else {
-          alert(
-            "Whatever OS you're running is not easily identified by my simple if statements. Good on you. As for your fonts, I have no clue where they are."
-          );
-        }
-      });
-
       const fontInput = document.getElementById("fontInput");
       let font = fontInput.value;
       const fontWeightInput = document.getElementById("fontWeightInput");
@@ -314,27 +286,25 @@
       const previewText = document.getElementById("previewText");
 
       previewText.style.font = `${typeSize}${typeUnits} ${font}`;
-      typeInputs.addEventListener("change", () => {
-        font = fontInput.value;
-        fontWeight = fontWeightInput.value;
-        typeSize = typeSizeInput.value;
-        typeUnits = typeUnitsInput.value;
-
-        previewText.style.font = `${fontWeight} ${typeSize}${typeUnits} ${font}`;
-        drawPreview();
-      });
 
       // set up canvas
       const c = document.getElementById("diagram");
       const ctx = c.getContext("2d"); // classify it as a 2D space
-      // c.style.width = "70%";
-      // c.style.height = "15rem";
 
       function unitsCorrectedSize(size) {
         if (typeUnits === "pt") {
+          console.log(`converted ${size} to ${size * (72 / 96)}`);
           return size * (72 / 96);
         }
+        console.log(`left size as ${size}`);
         return size;
+      }
+
+      function getRealFontHeightPx(textMetrics) {
+        return (
+          textMetrics.actualBoundingBoxAscent +
+          textMetrics.actualBoundingBoxDescent
+        );
       }
 
       function drawPreview() {
@@ -350,9 +320,7 @@
 
         const textMetrics = ctx.measureText(sampleText); // a character with the maximum height
 
-        let realHeight =
-          textMetrics.actualBoundingBoxAscent +
-          textMetrics.actualBoundingBoxDescent;
+        let realHeight = getRealFontHeightPx(textMetrics);
 
         document.getElementById(
           "realHeight"
@@ -412,27 +380,66 @@
       }
       drawPreview();
 
+      // EVENT HANDLERS
+      typeInputs.addEventListener("change", () => {
+        font = fontInput.value;
+        fontWeight = fontWeightInput.value;
+        typeSize = typeSizeInput.value;
+        typeUnits = typeUnitsInput.value;
+
+        previewText.style.font = `${fontWeight} ${typeSize}${typeUnits} ${font}`;
+        drawPreview();
+      });
+
       document
         .getElementById("copyButton")
         .addEventListener("click", async function () {
           // copy real height to clipboard
           let tempInput = document.createElement("input");
-          tempInput.value = `${unitsCorrectedSize(realHeight)} ${typeUnits}`;
+          tempInput.value = document.getElementById("realHeight").textContent;
           document.body.appendChild(tempInput);
           tempInput.select();
+          tempInput.setSelectionRange(0, 99999);
           document.execCommand("copy");
           document.body.removeChild(tempInput);
 
           // signify value has been copied via button content
-          let originalText = this.textContent; // Store original button text
+          let originalText = this.textContent;
           this.textContent = "✅";
           setTimeout(
             function () {
-              this.textContent = originalText; // Revert button text to original after 1 second
+              this.textContent = originalText;
             }.bind(this),
             1500
           );
         });
+
+      document.getElementById("launchFonts").addEventListener("click", () => {
+        if (navigator.platform.toUpperCase().indexOf("MAC") >= 0) {
+          window.open("fontbook://");
+        } else if (navigator.platform.toUpperCase().indexOf("WIN") >= 0) {
+          window.open("ms-settings:fonts");
+        } else if (navigator.userAgent.includes("Linux")) {
+          alert(
+            "I'm a novice programmer, ok? You chose linux and you knew the consequences when you did so. I have no clue how to open your font manager, if you even bothered to install one. Your fonts are in a folder somewhere, or three, I have no idea. Have fun searching, I believe in you."
+          );
+        } else if (navigator.userAgent.includes("Android")) {
+          alert(
+            "Font management is not available on Android. I don't make the rules. You can yell at Sundar Pichai if you want."
+          );
+        } else if (
+          navigator.userAgent.includes("iPhone") ||
+          navigator.userAgent.includes("iPad")
+        ) {
+          alert(
+            "Font management is not available on iOS. I don't make the rules. You can yell at Tim Apple if you want."
+          );
+        } else {
+          alert(
+            "Whatever OS you're running is not easily identified by my simple if statements. Good on you. As for your fonts, I have no clue where they are."
+          );
+        }
+      });
     </script>
   </body>
 </html>
