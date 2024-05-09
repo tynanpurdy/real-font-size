@@ -35,44 +35,87 @@
         --color-surface-mixed-600: #929490;
       }
 
+      * {
+        box-sizing: border-box;
+      }
+
       body {
+        font-size: 120%;
+        min-height: 100vh;
+        padding: 0% 5%;
+        margin: 0%;
+        display: grid;
+        justify-content: center;
+        grid-template-rows: auto auto 1fr;
+        grid-auto-rows: min-content;
+        overflow-y: auto;
+
         background-color: var(--color-surface-100);
-        margin: 5% 10%;
         color: var(--color-surface-600);
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
           Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
           sans-serif;
       }
 
-      /* @media (prefers-color-scheme: light) {
-        body {
-          background-color: white;
-          color: var(--color-surface-100);
-        }
-      } */
+      main {
+        grid-row: 2;
+        display: grid;
+        /* width: 100vw; */
+        grid-template-rows: auto auto auto;
+        grid-auto-rows: min-content;
+        /* grid-template-columns: repeat(2, minmax(384px, 1fr)); */
+        gap: 1rem;
+      }
 
-      /* @media (prefers-color-scheme: dark) {
-        body {
-          background-color: var(--color-surface-100);
-          color: var(--color-surface-600);
-        }
-      } */
+      footer {
+        grid-row: 3;
+        padding: 2% 0%;
+      }
+
+      .flex-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        column-gap: 1rem;
+        row-gap: 0.5rem;
+        align-items: baseline;
+      }
+
+      .group-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 1rem;
+        align-items: baseline;
+      }
+
+      .responsiveGrid {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-auto-rows: min-content;
+        gap: 1rem;
+      }
 
       h1 {
-        font-size: 96pt;
+        font-size: 400%;
         text-align: center;
+      }
+
+      select,
+      textarea,
+      input,
+      button {
+        font: inherit;
       }
 
       input,
       select {
         padding: 0.2rem;
+        margin: 0.2rem 0%;
         border: none;
         border-bottom: 2px solid var(--color-surface-500);
         background-color: var(--color-surface-100);
         color: white;
-        /* border-radius: 5px; */
-        font-size: 32px;
-        /* width: 300px; */
       }
       input:focus,
       select:focus {
@@ -82,16 +125,21 @@
       }
 
       button {
-        font-size: 18pt;
-        background-color: var(--color-surface-100);
-        border-radius: 1rem;
-        border: 1px solid var(--color-surface-400);
-        padding: 0.5rem 1rem;
+        background-color: transparent;
+        border-radius: 0.7rem;
+        border: none;
+        padding: 0.4rem 0.8rem;
+      }
+      button:hover {
+        background-color: var(--color-surface-200);
+      }
+
+      #diagram {
+        width: 100%;
       }
 
       #launchFonts {
-        color: var(--color-surface-600);
-        font-size: 12pt;
+        color: inherit;
         border-radius: 0%;
         outline: none;
         border: none;
@@ -102,6 +150,28 @@
       #launchFonts:hover {
         color: white;
         border-bottom: 1px solid white;
+      }
+
+      /* Mobile */
+      @media (max-width: 480px) {
+      }
+
+      /* Tablet */
+      @media (min-width: 481px) and (max-width: 768px) {
+        /* styles for tablets */
+      }
+
+      /* Desktop 769-1024px */
+      @media (min-width: 769px) {
+        /* styles for desktop computers */
+        main {
+          max-width: 80rem;
+        }
+
+        .responsiveGrid {
+          grid-template-columns: 2fr 3fr;
+          grid-auto-flow: row;
+        }
       }
     </style>
 
@@ -122,112 +192,92 @@
     gtag("config", "G-K4R6RNTHT5");
   </script>
   <body>
-    <h1><i>Real</i> Font Size</h1>
+    <header>
+      <h1><i>Real</i> Font Size</h1>
+    </header>
 
-    <div id="typeInputs">
-      <i>Type the name of any font on your computer</i>
-      <button id="launchFonts">(<i>See your fonts</i>)</button>
-
-      <div
-        style="
-          display: flex;
-          flex-direction: row;
-          gap: 1rem;
-          align-items: baseline;
-          font-size: 24pt;
-          padding-bottom: 1rem;
-        "
-      >
-        <input type="text" id="fontInput" value="Arial" />
-
-        <input
-          type="number"
-          class="form-control"
-          id="typeSizeInput"
-          min="1"
-          max="400"
-          value="12"
-        />
-
-        <select class="form-control" id="typeUnitsInput">
-          <option value="px">px</option>
-          <option value="pt">pt</option>
-        </select>
-
-        <i>is actually </i>
-        <div id="realHeight" style="color: white"></div>
-        <button
-          id="copyButton"
-          style="
-            font-size: 18pt;
-            background-color: var(--color-surface-100);
-            border-radius: 1rem;
-            border: 1px solid var(--color-surface-400);
-            padding: 0.5rem 1rem;
-          "
-        >
-          📋
-        </button>
+    <main>
+      <div class="launchFonts flex-row">
+        <i>Type the name of any font on your device</i>
+        <button id="launchFonts">(<i>See your fonts</i>)</button>
       </div>
-    </div>
-    <div style="display: flex; flex-direction: row; gap: 2rem">
-      <div id="previewText" style="font-family: 'Arial'">
-        <!-- make limit to 80 char wide?-->
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ultrices vitae
-        auctor eu augue ut lectus. Magna sit amet purus gravida quis blandit
-        turpis. Quam quisque id diam vel quam elementum. Mi sit amet mauris
-        commodo quis imperdiet massa tincidunt. Habitant morbi tristique
-        senectus et netus. Varius morbi enim nunc faucibus a pellentesque sit.
-        Vel turpis nunc eget lorem dolor sed viverra.
-      </div>
+      <div class="flex-row">
+        <div class="typeInputs flex-row" id="typeInputs">
+          <input type="text" id="fontInput" value="Arial" />
 
-      <canvas id="diagram"></canvas>
-    </div>
-    <script
-      type="text/javascript"
-      src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
-      data-name="bmc-button"
-      data-slug="tynanpurdy"
-      data-color="#97d283"
-      data-emoji=""
-      data-font="Arial"
-      data-text="Buy me a coffee"
-      data-outline-color="#000000"
-      data-font-color="#000000"
-      data-coffee-color="#ffffff"
-    ></script>
+          <select class="form-control" id="fontWeightInput">
+            <option value="100">Thin</option>
+            <option value="200">Extra Light</option>
+            <option value="300">Light</option>
+            <option value="400" selected>Regular</option>
+            <option value="500">Medium</option>
+            <option value="600">Semi Bold</option>
+            <option value="700">Bold</option>
+            <option value="800">Extra Bold</option>
+            <option value="900">Black</option>
+          </select>
+
+          <div class="group-row">
+            <input
+              type="number"
+              class="form-control"
+              id="typeSizeInput"
+              inputmode="numeric"
+              min="1"
+              max="400"
+              value="12"
+            />
+
+            <select class="form-control" id="typeUnitsInput">
+              <option value="px">px</option>
+              <option value="pt">pt</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <i>is actually </i>
+        </div>
+        <div class="group-row">
+          <div id="realHeight" style="color: white"></div>
+          <button id="copyButton">📋</button>
+        </div>
+      </div>
+      <div class="responsiveGrid">
+        <canvas id="diagram"></canvas>
+
+        <div id="previewText" style="font-family: 'Arial'">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ultrices
+          vitae auctor eu augue ut lectus. Magna sit amet purus gravida quis
+          blandit turpis. Quam quisque id diam vel quam elementum. Mi sit amet
+          mauris commodo quis imperdiet massa tincidunt. Habitant morbi
+          tristique senectus et netus. Varius morbi enim nunc faucibus a
+          pellentesque sit. Vel turpis nunc eget lorem dolor sed viverra.
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <script
+        type="text/javascript"
+        src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
+        data-name="bmc-button"
+        data-slug="tynanpurdy"
+        data-color="#97d283"
+        data-emoji=""
+        data-font="Arial"
+        data-text="Buy me a coffee"
+        data-outline-color="#000000"
+        data-font-color="#000000"
+        data-coffee-color="#ffffff"
+      ></script>
+    </footer>
+
     <script>
-      // open your local fonts list by platform
-      document.getElementById("launchFonts").addEventListener("click", () => {
-        if (navigator.platform.toUpperCase().indexOf("MAC") >= 0) {
-          window.open("fontbook://");
-        } else if (navigator.platform.toUpperCase().indexOf("WIN") >= 0) {
-          window.open("ms-settings:fonts");
-        } else if (navigator.userAgent.includes("Linux")) {
-          alert(
-            "I'm a novice programmer, ok? You chose linux and you knew the consequences when you did so. I have no clue how to open your font manager, if you even bothered to install one. Your fonts are in a folder somewhere, or three, I have no idea. Have fun searching, I believe in you."
-          );
-        } else if (navigator.userAgent.includes("Android")) {
-          alert(
-            "Font management is not available on Android. I don't make the rules. You can yell at Sundar Pichai if you want."
-          );
-        } else if (
-          navigator.userAgent.includes("iPhone") ||
-          navigator.userAgent.includes("iPad")
-        ) {
-          alert(
-            "Font management is not available on iOS. I don't make the rules. You can yell at Tim Apple if you want."
-          );
-        } else {
-          alert(
-            "Whatever OS you're running is not easily identified by my simple if statements. Good on you. As for your fonts, I have no clue where they are."
-          );
-        }
-      });
-
       const fontInput = document.getElementById("fontInput");
       let font = fontInput.value;
+      const fontWeightInput = document.getElementById("fontWeightInput");
+      let fontWeight = fontWeightInput.value;
       const typeSizeInput = document.getElementById("typeSizeInput");
       let typeSize = typeSizeInput.value;
       const typeUnitsInput = document.getElementById("typeUnitsInput");
@@ -236,49 +286,48 @@
       const previewText = document.getElementById("previewText");
 
       previewText.style.font = `${typeSize}${typeUnits} ${font}`;
-      typeInputs.addEventListener("change", () => {
-        font = fontInput.value;
-        typeSize = typeSizeInput.value;
-        typeUnits = typeUnitsInput.value;
-
-        previewText.style.font = `${typeSize}${typeUnits} ${font}`;
-        drawPreview();
-      });
 
       // set up canvas
-      const c = document.getElementById("diagram"); // get canvas element
+      const c = document.getElementById("diagram");
       const ctx = c.getContext("2d"); // classify it as a 2D space
-      c.style.width = "500px";
-      c.style.height = "300px";
-
-      const sampleText = "Apd";
-      const sampleTextX = 0;
-      let sampleTextY = 400;
 
       function unitsCorrectedSize(size) {
         if (typeUnits === "pt") {
+          console.log(`converted ${size} to ${size * (72 / 96)}`);
           return size * (72 / 96);
-        } else {
-          return size;
         }
+        console.log(`left size as ${size}`);
+        return size;
+      }
+
+      function getRealFontHeightPx(textMetrics) {
+        return (
+          textMetrics.actualBoundingBoxAscent +
+          textMetrics.actualBoundingBoxDescent
+        );
       }
 
       function drawPreview() {
+        const diagramFontSize = "18rem";
+
         ctx.clearRect(0, 0, c.width, c.height);
-        let diagramFontStyle = `240pt ${font}`;
-        testFontStyle = `${typeSize}${typeUnits} ${font}`;
-        ctx.font = testFontStyle; // set canvas font
-        console.log(testFontStyle);
+
+        let diagramFontStyle = `${fontWeight} ${diagramFontSize} ${font}`;
+        testFontStyle = `${fontWeight} ${typeSize}${typeUnits} ${font}`;
+        ctx.font = testFontStyle;
+
+        const sampleText = "Apd";
 
         const textMetrics = ctx.measureText(sampleText); // a character with the maximum height
 
-        let realHeight =
-          textMetrics.actualBoundingBoxAscent +
-          textMetrics.actualBoundingBoxDescent;
+        let realHeight = getRealFontHeightPx(textMetrics);
 
         document.getElementById(
           "realHeight"
         ).textContent = `${unitsCorrectedSize(realHeight)} ${typeUnits}`;
+
+        const sampleTextX = 0;
+        let sampleTextY = 400;
 
         ctx.font = diagramFontStyle;
         const diagramTextMetrics = ctx.measureText(sampleText);
@@ -288,7 +337,7 @@
           diagramTextMetrics.fontBoundingBoxDescent;
         sampleTextY = diagramTextMetrics.fontBoundingBoxAscent;
 
-        diagramFontStyle = `240pt ${font}`;
+        diagramFontStyle = `${fontWeight} ${diagramFontSize} ${font}`;
         ctx.font = diagramFontStyle;
 
         ctx.beginPath();
@@ -331,27 +380,66 @@
       }
       drawPreview();
 
+      // EVENT HANDLERS
+      typeInputs.addEventListener("change", () => {
+        font = fontInput.value;
+        fontWeight = fontWeightInput.value;
+        typeSize = typeSizeInput.value;
+        typeUnits = typeUnitsInput.value;
+
+        previewText.style.font = `${fontWeight} ${typeSize}${typeUnits} ${font}`;
+        drawPreview();
+      });
+
       document
         .getElementById("copyButton")
         .addEventListener("click", async function () {
           // copy real height to clipboard
           let tempInput = document.createElement("input");
-          tempInput.value = `${unitsCorrectedSize(realHeight)} ${typeUnits}`;
+          tempInput.value = document.getElementById("realHeight").textContent;
           document.body.appendChild(tempInput);
           tempInput.select();
+          tempInput.setSelectionRange(0, 99999);
           document.execCommand("copy");
           document.body.removeChild(tempInput);
 
           // signify value has been copied via button content
-          let originalText = this.textContent; // Store original button text
+          let originalText = this.textContent;
           this.textContent = "✅";
           setTimeout(
             function () {
-              this.textContent = originalText; // Revert button text to original after 1 second
+              this.textContent = originalText;
             }.bind(this),
-            1000
+            1500
           );
         });
+
+      document.getElementById("launchFonts").addEventListener("click", () => {
+        if (navigator.platform.toUpperCase().indexOf("MAC") >= 0) {
+          window.open("fontbook://");
+        } else if (navigator.platform.toUpperCase().indexOf("WIN") >= 0) {
+          window.open("ms-settings:fonts");
+        } else if (navigator.userAgent.includes("Linux")) {
+          alert(
+            "I'm a novice programmer, ok? You chose linux and you knew the consequences when you did so. I have no clue how to open your font manager, if you even bothered to install one. Your fonts are in a folder somewhere, or three, I have no idea. Have fun searching, I believe in you."
+          );
+        } else if (navigator.userAgent.includes("Android")) {
+          alert(
+            "Font management is not available on Android. I don't make the rules. You can yell at Sundar Pichai if you want."
+          );
+        } else if (
+          navigator.userAgent.includes("iPhone") ||
+          navigator.userAgent.includes("iPad")
+        ) {
+          alert(
+            "Font management is not available on iOS. I don't make the rules. You can yell at Tim Apple if you want."
+          );
+        } else {
+          alert(
+            "Whatever OS you're running is not easily identified by my simple if statements. Good on you. As for your fonts, I have no clue where they are."
+          );
+        }
+      });
     </script>
   </body>
 </html>
