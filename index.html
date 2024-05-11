@@ -97,8 +97,7 @@
       }
 
       h1 {
-        font-size: 400%;
-        text-align: center;
+        font-size: 250%;
       }
 
       select,
@@ -164,6 +163,11 @@
           max-width: 80rem;
         }
 
+        h1 {
+          font-size: 400%;
+          text-align: center;
+        }
+
         .responsiveGrid {
           grid-template-columns: 2fr 3fr;
           grid-auto-flow: row;
@@ -218,7 +222,7 @@
               type="number"
               class="form-control"
               id="typeSizeInput"
-              inputmode="numeric"
+              inputmode="decimal"
               min="1"
               max="400"
               value="12"
@@ -289,10 +293,8 @@
 
       function unitsCorrectedSize(size) {
         if (typeUnits === "pt") {
-          console.log(`converted ${size} to ${size * (72 / 96)}`);
-          return size * (72 / 96);
+          return size * (72.0 / 96.0);
         }
-        console.log(`left size as ${size}`);
         return size;
       }
 
@@ -304,28 +306,26 @@
       }
 
       function drawPreview() {
-        const diagramFontSize = "18rem";
-
         ctx.clearRect(0, 0, c.width, c.height);
 
-        let diagramFontStyle = `${fontWeight} ${diagramFontSize} ${font}`;
         testFontStyle = `${fontWeight} ${typeSize}${typeUnits} ${font}`;
         ctx.font = testFontStyle;
 
         const sampleText = "Apd";
+        const textMetrics = ctx.measureText(sampleText);
 
-        const textMetrics = ctx.measureText(sampleText); // a character with the maximum height
-
-        let realHeight = getRealFontHeightPx(textMetrics);
-
+        let realHeightPx = getRealFontHeightPx(textMetrics);
         document.getElementById(
           "realHeight"
-        ).textContent = `${unitsCorrectedSize(realHeight)} ${typeUnits}`;
+        ).textContent = `${unitsCorrectedSize(realHeightPx)} ${typeUnits}`;
 
         const sampleTextX = 0;
         let sampleTextY = 400;
 
+        const diagramFontSize = "18rem";
+        let diagramFontStyle = `${fontWeight} ${diagramFontSize} ${font}`;
         ctx.font = diagramFontStyle;
+
         const diagramTextMetrics = ctx.measureText(sampleText);
         c.width = diagramTextMetrics.width;
         c.height =
@@ -346,6 +346,7 @@
             diagramTextMetrics.fontBoundingBoxDescent
         );
         ctx.stroke();
+
         ctx.fillStyle = "white";
         ctx.fillText(sampleText, sampleTextX, sampleTextY);
 
