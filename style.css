@@ -1,0 +1,169 @@
+:root {
+    --background-color-light: #ffffff;
+    --text-color-light: #000000;
+    --background-color-dark: #333333;
+    --text-color-dark: #ffffff;
+
+    /** CSS DARK THEME PRIMARY COLORS */
+    --color-primary-100: #89cc74;
+    --color-primary-200: #97d283;
+    --color-primary-300: #a4d893;
+    --color-primary-400: #b2dda2;
+    --color-primary-500: #bfe3b1;
+    --color-primary-600: #cce9c0;
+
+    /** CSS DARK THEME SURFACE COLORS */
+    --color-surface-100: #121212;
+    --color-surface-200: #282828;
+    --color-surface-300: #3f3f3f;
+    --color-surface-400: #575757;
+    --color-surface-500: #717171;
+    --color-surface-600: #8b8b8b;
+
+    /** CSS DARK THEME MIXED SURFACE COLORS */
+    --color-surface-mixed-100: #1d221b;
+    --color-surface-mixed-200: #323730;
+    --color-surface-mixed-300: #484c46;
+    --color-surface-mixed-400: #60635e;
+    --color-surface-mixed-500: #787b77;
+    --color-surface-mixed-600: #929490;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-size: 120%;
+    min-height: 100vh;
+    padding: 0% 5%;
+    margin: 0%;
+    display: grid;
+    justify-content: center;
+    grid-template-rows: auto auto 1fr;
+    grid-auto-rows: min-content;
+    overflow-y: auto;
+
+    background-color: var(--color-surface-100);
+    color: var(--color-surface-600);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+      sans-serif;
+  }
+
+  main {
+    grid-row: 2;
+    display: grid;
+    /* width: 100vw; */
+    grid-template-rows: auto auto auto;
+    grid-auto-rows: min-content;
+    /* grid-template-columns: repeat(2, minmax(384px, 1fr)); */
+    gap: 1rem;
+  }
+
+  footer {
+    grid-row: 3;
+    padding: 2% 0%;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    align-items: baseline;
+  }
+
+  .group-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .responsiveGrid {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-auto-rows: min-content;
+    gap: 1rem;
+  }
+
+  h1 {
+    font-size: 250%;
+  }
+
+  select,
+  textarea,
+  input,
+  button {
+    font: inherit;
+  }
+
+  input,
+  select {
+    padding: 0.2rem;
+    margin: 0.2rem 0%;
+    border: none;
+    border-bottom: 2px solid var(--color-surface-500);
+    background-color: var(--color-surface-100);
+    color: white;
+  }
+  input:focus,
+  select:focus {
+    outline: none;
+    border: none;
+    border-bottom: 2px solid var(--color-primary-100);
+  }
+
+  button {
+    background-color: transparent;
+    border-radius: 0.7rem;
+    border: none;
+    padding: 0.4rem 0.8rem;
+  }
+  button:hover {
+    background-color: var(--color-surface-200);
+  }
+
+  #diagram {
+    width: 100%;
+  }
+
+  #launchFonts {
+    color: inherit;
+    border-radius: 0%;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid;
+    padding: 0.1rem 0%;
+  }
+
+  #launchFonts:hover {
+    color: white;
+    border-bottom: 1px solid white;
+  }
+
+  /* Tablet */
+  @media (min-width: 481px) and (max-width: 768px) {
+    /* styles for tablets */
+  }
+
+  /* Desktop 769-1024px */
+  @media (min-width: 769px) {
+    /* styles for desktop computers */
+    main {
+      max-width: 80rem;
+    }
+
+    h1 {
+      font-size: 400%;
+      text-align: center;
+    }
+
+    .responsiveGrid {
+      grid-template-columns: 2fr 3fr;
+      grid-auto-flow: row;
+    }
+  }
