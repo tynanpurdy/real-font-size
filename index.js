@@ -19,7 +19,7 @@ class Font {
   }
 }
 
-previewText.style.font = new Font().style()
+previewText.style.font = new Font().style();
 
 // FUNCTIONS
 function unitsCorrectedSize(size, units) {
@@ -43,10 +43,12 @@ function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
   const ctx = diagram.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // measure the chosen font
   ctx.font = font.style();
   const sampleText = testString;
   const textMetrics = ctx.measureText(sampleText);
 
+  // display the real height
   const realHeightPx = getRealFontHeightPx(textMetrics);
   document.getElementById("realHeight").textContent = `${unitsCorrectedSize(
     realHeightPx,
@@ -54,17 +56,18 @@ function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
   )} ${font.units}`;
   console.log(textMetrics);
 
-  const sampleTextX = 0;
-  let sampleTextY = 400;
-
-  const diagramTextMetrics = ctx.measureText(sampleText);
-  canvas.width = diagramTextMetrics.width;
-  canvas.height = getFontBoundingHeightPx(diagramTextMetrics);
-  sampleTextY = diagramTextMetrics.fontBoundingBoxAscent;
-
+  // create a fixed-size matching diagram font
   const diagramFont = new Font(font.name, font.weight, 18, "rem");
   ctx.font = diagramFont.style();
+  const diagramTextMetrics = ctx.measureText(sampleText);
 
+  // resize canvas to fit diagram text
+  const sampleTextX = 0;
+  const sampleTextY = diagramTextMetrics.fontBoundingBoxAscent;
+  canvas.width = diagramTextMetrics.width;
+  canvas.height = getFontBoundingHeightPx(diagramTextMetrics);
+
+  // draw bounding-box background
   ctx.beginPath();
   ctx.fillStyle = "#282828";
   ctx.fillRect(
@@ -76,6 +79,8 @@ function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
   );
   ctx.stroke();
 
+  // draw diagram text
+  ctx.font = diagramFont.style();
   ctx.fillStyle = "white";
   ctx.fillText(sampleText, sampleTextX, sampleTextY);
 
