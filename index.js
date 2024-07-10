@@ -39,7 +39,7 @@ function getFontBoundingHeightPx(textMetrics) {
   return textMetrics.fontBoundingBoxAscent + textMetrics.fontBoundingBoxDescent;
 }
 
-function drawPreview(font = new Font(), testString = "Apd", canvas = diagram) {
+function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
   const ctx = diagram.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -101,7 +101,7 @@ function drawPreview(font = new Font(), testString = "Apd", canvas = diagram) {
     ctx.stroke();
   });
 }
-drawPreview();
+drawDiagram();
 
 // EVENT HANDLERS
 typeInputs.addEventListener("change", () => {
@@ -112,7 +112,7 @@ typeInputs.addEventListener("change", () => {
   newFont.units = typeUnitsInput.value;
 
   previewText.style.font = newFont.style();
-  drawPreview(newFont);
+  drawDiagram(newFont);
 });
 
 document
@@ -140,7 +140,7 @@ document
 
 testStringInput.addEventListener("change", () => {
   const testString = this.value.trim() !== "" ? this.value : "Apd";
-  drawPreview();
+  drawDiagram();
   console.log(`new test string: ${testString}`);
 });
 
