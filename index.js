@@ -14,12 +14,12 @@ class Font {
       (this.units = units);
   }
 
-  style() {
+  get style() {
     return `${this.weight} ${this.size}${this.units} ${this.name}`;
   }
 }
 
-previewText.style.font = new Font().style();
+previewText.style.font = new Font().style;
 
 // FUNCTIONS
 function unitsCorrectedSize(size, units) {
@@ -49,7 +49,7 @@ function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
   const ctx = clearCanvas(canvas);
 
   // measure the chosen font
-  ctx.font = font.style();
+  ctx.font = font.style;
   const sampleText = testString;
   const textMetrics = ctx.measureText(sampleText);
 
@@ -63,7 +63,7 @@ function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
 
   // create a fixed-size matching diagram font
   const diagramFont = new Font(font.name, font.weight, 18, "rem");
-  ctx.font = diagramFont.style();
+  ctx.font = diagramFont.style;
   const diagramTextMetrics = ctx.measureText(sampleText);
 
   // resize canvas to fit diagram text
@@ -85,7 +85,7 @@ function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
   ctx.stroke();
 
   // draw diagram text
-  ctx.font = diagramFont.style();
+  ctx.font = diagramFont.style;
   ctx.fillStyle = "white";
   ctx.fillText(sampleText, sampleTextX, sampleTextY);
 
@@ -121,7 +121,7 @@ typeInputs.addEventListener("change", () => {
   newFont.size = typeSizeInput.value;
   newFont.units = typeUnitsInput.value;
 
-  previewText.style.font = newFont.style();
+  previewText.style.font = newFont.style;
   drawDiagram(newFont);
 });
 
