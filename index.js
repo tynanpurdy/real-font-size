@@ -39,9 +39,14 @@ function getFontBoundingHeightPx(textMetrics) {
   return textMetrics.fontBoundingBoxAscent + textMetrics.fontBoundingBoxDescent;
 }
 
-function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
-  const ctx = diagram.getContext("2d");
+function clearCanvas(canvas) {
+  const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  return ctx
+}
+
+function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
+  const ctx = clearCanvas(canvas);
 
   // measure the chosen font
   ctx.font = font.style();
