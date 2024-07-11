@@ -128,24 +128,24 @@ typeInputs.addEventListener("change", () => {
 document
   .getElementById("copyButton")
   .addEventListener("click", async function () {
-    // copy real height to clipboard
-    let tempInput = document.createElement("input");
-    tempInput.value = document.getElementById("realHeight").textContent;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999);
-    document.execCommand("copy");
-    document.body.removeChild(tempInput);
+    try {
+      const realHeight = document.getElementById("realHeight").textContent;
 
-    // signify value has been copied via button content
-    let originalText = this.textContent;
-    this.textContent = "✅";
-    setTimeout(
-      function () {
-        this.textContent = originalText;
-      }.bind(this),
-      1500
-    );
+      // Use the Clipboard API to copy the text
+      await navigator.clipboard.writeText(realHeight);
+
+      // signify value has been copied via button content
+      let originalText = this.textContent;
+      this.textContent = "✅";
+      setTimeout(
+        function () {
+          this.textContent = originalText;
+        }.bind(this),
+        1500
+      );
+    } catch (err) {
+      console.error("Failed to copy: ", err);
+    }
   });
 
 testStringInput.addEventListener("change", () => {
