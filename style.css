@@ -66,14 +66,22 @@
     padding: 2% 0%;
   }
 
-  .flex-row {
+  .flex {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     column-gap: 1rem;
     row-gap: 0.5rem;
     align-items: baseline;
   }
+
+  .row {
+    flex-direction: row;
+  }
+
+  .col {
+    flex-direction: column;
+  }
+
 
   .group-row {
     display: flex;

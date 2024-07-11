@@ -26,12 +26,12 @@
     </header>
 
     <main>
-      <div class="launchFonts flex-row">
+      <div class="launchFonts flex row">
         <i>Type the name of any font on your device</i>
         <button id="launchFonts">(<i>See your fonts</i>)</button>
       </div>
-      <div class="flex-row">
-        <div class="typeInputs flex-row" id="typeInputs">
+      <div class="flex row">
+        <div class="typeInputs flex row" id="typeInputs">
           <input type="text" id="fontInput" value="Arial" />
 
           <select class="form-control" id="fontWeightInput">
@@ -72,7 +72,10 @@
         </div>
       </div>
       <div class="responsiveGrid">
-        <canvas id="diagram"></canvas>
+        <div class="flex col">
+          <canvas id="diagram"></canvas>
+          <input id="testStringInput" type="text" placeholder="Apd" />
+        </div>
 
         <div id="previewText" style="font-family: 'Arial'">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -84,7 +87,6 @@
           pellentesque sit. Vel turpis nunc eget lorem dolor sed viverra.
         </div>
       </div>
-      <input id="testStringInput" type="text" placeholder="Apd" />
     </main>
 
     <footer>
