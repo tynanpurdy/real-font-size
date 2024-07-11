@@ -21,6 +21,9 @@ class Font {
 
 previewText.style.font = new Font().style;
 
+// INITIALIZE
+updateFont();
+
 // FUNCTIONS
 function unitsCorrectedSize(size, units) {
   if (units === "pt") {
@@ -43,6 +46,30 @@ function clearCanvas(canvas) {
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   return ctx;
+}
+
+function updateFont() {
+  const newFont = getChosenFont();
+  const testString = getTestString();
+  console.log("measure updated");
+  console.log(newFont);
+  console.log(testString);
+  drawDiagram(newFont, testString);
+  previewText.style.font = newFont.style;
+}
+
+function getChosenFont() {
+  return new Font(
+    fontInput.value,
+    fontWeightInput.value,
+    typeSizeInput.value,
+    typeUnitsInput.value
+  );
+}
+
+function getTestString() {
+  const testString = testStringInput.value;
+  return testString != "" ? testString : "Apd";
 }
 
 function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
@@ -111,19 +138,11 @@ function drawDiagram(font = new Font(), testString = "Apd", canvas = diagram) {
     ctx.stroke();
   });
 }
-drawDiagram();
 
 // EVENT HANDLERS
-typeInputs.addEventListener("change", () => {
-  newFont = new Font();
-  newFont.name = fontInput.value;
-  newFont.weight = fontWeightInput.value;
-  newFont.size = typeSizeInput.value;
-  newFont.units = typeUnitsInput.value;
+typeInputs.addEventListener("change", updateFont);
 
-  previewText.style.font = newFont.style;
-  drawDiagram(newFont);
-});
+testStringInput.addEventListener("input", updateFont);
 
 document
   .getElementById("copyButton")
@@ -147,12 +166,6 @@ document
       console.error("Failed to copy: ", err);
     }
   });
-
-testStringInput.addEventListener("change", () => {
-  const testString = this.value.trim() !== "" ? this.value : "Apd";
-  drawDiagram();
-  console.log(`new test string: ${testString}`);
-});
 
 document.getElementById("launchFonts").addEventListener("click", () => {
   if (navigator.userAgent.toUpperCase().indexOf("MAC") >= 0) {
